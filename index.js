@@ -4,15 +4,24 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const cors = require('cors')
 
 // express with bodyParser
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // express with json
 app.use(bodyParser.json());
-const GameModel = require('./database/models/Game');
-const Game = require('./database/models/Game');
 
+// =======
+// var corsOptions = {
+//   origin: 'http://seudominio.com', // Apenas esse dominio pode fazer requisição para sua api
+// }
+// app.use(cors(corsOptions))
+// =======
+
+app.use(cors()); // remove cors error access bloked
+
+const GameModel = require('./database/models/Game');
 
 // the first end point
 // list all games

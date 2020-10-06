@@ -1,0 +1,141 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Loja de games</title>
+  <hr>
+  <h4>Lista de games</h4>
+  <ul id="games"></ul>
+
+  <hr>
+  <h4> Novo Game </h4>
+  <input type="text" name="title" id="title" placeholder="Título" /> <br>
+  <input type="number" name="year" id="year" placeholder="Ano" /> <br>
+  <input type="number" name="price" id="price" placeholder="Preço" /> <br>
+  <button type="button" onclick="createGame()"> Criar </button>
+
+  <hr>
+  <h4> Editar Game </h4>
+  <input type="text" name="idEdit" id="idEdit" readonly  disabled/> <br>
+  <input type="text" name="titleEdit" id="titleEdit" placeholder="Título" /> <br>
+  <input type="number" name="yearEdit" id="yearEdit" placeholder="Ano" /> <br>
+  <input type="number" name="priceEdit" id="priceEdit" placeholder="Preço" /> <br>
+  <button type="button" onclick="updateGame()"> Editar </button>
+
+</head>
+
+<body>
+
+
+
+
+</body>
+
+<!-- axios  -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+
+  const baseUrl = "http://localhost:3000";
+
+  function createGame() {
+    let titleInput = document.getElementById("title");
+    let yearInput = document.getElementById("year");
+    let priceInput = document.getElementById("price");
+
+    let game = {
+      title: titleInput.value,
+      price: priceInput.value,
+      year: yearInput.value,
+    };
+
+    axios.post(`${baseUrl}/game`, game).then((response) => {
+      if (response.status === 200) {
+        alert("Game cadastrado");
+      }
+
+    }).catch(error => console.log(error));
+  }
+
+  // list item is type of Element => <li> 
+  function deleteGame(listItem) {
+    let id = listItem.getAttribute("data-id");
+    axios.delete(`${baseUrl}/game/${id}`).then((response) => {
+      if (response.status === 200) {
+        alert("Game deletado");
+      }
+    }).catch(error => console.log(error));
+  }
+
+  // list item is type of Element => <li> 
+  function loadForm(listItem) {
+    let id = listItem.getAttribute('data-id');
+    let title = listItem.getAttribute('data-title');
+    let year = listItem.getAttribute('data-year');
+    let price = listItem.getAttribute('data-price');
+
+    document.getElementById("idEdit").value = id;
+    document.getElementById("titleEdit").value = title;
+    document.getElementById("yearEdit").value = year;
+    document.getElementById("priceEdit").value = price;
+  }
+
+  function updateGame() {
+    let idInput = document.getElementById("idEdit");
+    let titleInput = document.getElementById("titleEdit");
+    let yearInput = document.getElementById("yearEdit");
+    let priceInput = document.getElementById("priceEdit");
+
+    let game = {
+      title: titleInput.value,
+      price: priceInput.value,
+      year: yearInput.value,
+    };
+
+    let id = idInput.value;
+    axios.put(`${baseUrl}/game/${id}`, game).then((response) => {
+      if (response.status === 200) {
+        alert("Game atualizado");
+      }
+    }).catch(error => console.log(error));
+  }
+
+  // GET all
+  axios.get(`${baseUrl}/games`).then((response) => {
+    let games = response.data;
+    let list = document.getElementById('games');
+
+    games.forEach(game => {
+      let item = document.createElement("li");
+
+      // Atributos custominizados são atributos que podemos criar no hmtl tendo o data- na frente
+      item.setAttribute("data-id", game.id);
+      item.setAttribute("data-title", game.title);
+      item.setAttribute("data-year", game.year);
+      item.setAttribute("data-price", game.price);
+
+      item.innerHTML = `${game.id} - ${game.title} - $${game.price} `;
+
+      let deleteBtn = document.createElement("button");
+      deleteBtn.innerHTML = "Deletar";
+
+      // link click event to deleteGame(game)
+      deleteBtn.addEventListener("click", () => deleteGame(item));
+      item.appendChild(deleteBtn);
+
+
+      let editBtn = document.createElement("button");
+      editBtn.innerHTML = "Editar";
+
+      editBtn.addEventListener("click", () => loadForm(item));
+      item.appendChild(editBtn);
+
+
+      list.appendChild(item);
+    });
+
+  }).catch(error => console.log(error));
+</script>
+
+</html>
