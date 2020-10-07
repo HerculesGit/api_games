@@ -13,3 +13,8 @@ npm i cors --save # remove cors error (Access to XMLHttpRequest at 'localhost:30
 
 
 npm i --save jsonwebtoken # for authenticate with JWT
+
+# ==============
+run:
+
+npm i # install all dependencies. nodemon index.js or node index.js # run with nodemon if nodemon installed globally or run with node
