@@ -10,3 +10,6 @@ npm install --save sequelize # sequelize
 npm install --save pg pg-hstore # postgress for sequelize
 
 npm i cors --save # remove cors error (Access to XMLHttpRequest at 'localhost:3000/games' from origin 'null' has been blocked by CORS policy....
+
+
+npm i --save jsonwebtoken # for authenticate with JWT
